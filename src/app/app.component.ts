@@ -9,6 +9,7 @@ import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 })
 
 export class AppComponent {
+
     title = 'Datastructure';
     htmlStr: any;
     htmlStrTest: any;
@@ -19,30 +20,25 @@ export class AppComponent {
     boardArray = [];
     nodes = [];
     nodesToAnimate = [];
+    board: Board;
+    speed: number;
+    object: any;
+
     constructor(private sanitizer: DomSanitizer) {
         console.log("Started");
         this.createGrid();
     }
 
-    RunBFS() {
-        console.log("Test the call");
-        let name = "bfs";
-        this.UnweightedSearchAlgorithm(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, name);
-        console.log(this.nodes);
-        this.AnimateTheNodes();
-
-    }
-
-    AnimateTheNodes() {
-
-    }
-
     createGrid() {
+        let boardData = {} as Board;
+        this.board = boardData;
         let tableHTML = "";
-        this.height = Math.floor((document.documentElement.clientHeight) / 15);
-        this.width = Math.floor(document.documentElement.clientWidth / 25);
-        this.start = Math.floor(this.height / 2).toString() + "-" + Math.floor(this.width / 4).toString();
-        this.target = Math.floor(this.height / 2).toString() + "-" + Math.floor(3 * this.width / 4).toString();
+        this.board.height = this.height = Math.floor((document.documentElement.clientHeight) / 15);
+        this.board.width = this.width = Math.floor(document.documentElement.clientWidth / 25);
+        this.board.start = this.start = Math.floor(this.height / 2).toString() + "-" + Math.floor(this.width / 4).toString();
+        this.board.target = this.target = Math.floor(this.height / 2).toString() + "-" + Math.floor(3 * this.width / 4).toString();
+        this.board.speed = "average";
+
         console.log(this.height, ":", this.width, ":", this.start, ":", this.target);
         for (let r = 0; r < this.height; r++) {
             let currentArrayRow = [];
@@ -81,6 +77,7 @@ export class AppComponent {
         let exploredNodes = {
             start: true
         };
+        nodesToAnimate = [];
         while (structure.length) {
             let currentNode = name === "bfs" ? structure.shift() : structure.pop();
             nodesToAnimate.push(currentNode);
@@ -88,6 +85,7 @@ export class AppComponent {
             currentNode.status = "visited";
             if (currentNode.id === target) {
                 console.log("success");
+                this.board.nodesToAnimate = nodesToAnimate;
                 return "success";
             }
             let currentNeighbors = this.getNeighbors(currentNode.id, nodes, boardArray, name);
@@ -150,35 +148,84 @@ export class AppComponent {
         }
         return neighbors;
     }
+
+    RunBFS() {
+        console.log("Test the call");
+        let name = "dfs";
+        //this.createGrid();
+        this.UnweightedSearchAlgorithm(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, name);
+        this.AnimateTheNodes();
+
+    }
+
+    AnimateTheNodes() {
+        let nodes = this.board.nodesToAnimate.slice(0);
+        this.speed = this.board.speed === "fast" ?
+            0 : this.board.speed === "average" ?
+                25 : 50;
+        console.log(nodes);
+        console.log("speed:", this.speed);
+        for (let i = 0; i < nodes.length; i++) {
+            setTimeout(() => {
+                this.change(nodes[i], nodes[i - 1]);
+            }, this.speed*(i+1));
+        }
+    }
+
+    change(currentNode, previousNode, bidirectional = false) {
+        let currentHTMLNode = document.getElementById(currentNode.id);
+        let relevantClassNames = ["start", "target", "object", "visitedStartNodeBlue", "visitedStartNodePurple", "visitedObjectNode", "visitedTargetNodePurple", "visitedTargetNodeBlue"];
+        if (!relevantClassNames.includes(currentHTMLNode.className)) {
+            currentHTMLNode.className = !bidirectional ?
+                "current" : currentNode.weight === 15 ?
+                    "visited weight" : "visited";
+        }
+        if (currentHTMLNode.className === "visitedStartNodePurple" && !this.object) {
+            currentHTMLNode.className = "visitedStartNodeBlue";
+        }
+        if (currentHTMLNode.className === "target" && this.object) {
+            currentHTMLNode.className = "visitedTargetNodePurple";
+        }
+        if (previousNode) {
+            let previousHTMLNode = document.getElementById(previousNode.id);
+            if (!relevantClassNames.includes(previousHTMLNode.className)) {
+                if (this.object) {
+                    previousHTMLNode.className = previousNode.weight === 15 ? "visitedobject weight" : "visitedobject";
+                } else {
+                    previousHTMLNode.className = previousNode.weight === 15 ? "visited weight" : "visited";
+                }
+            }
+        }
+    }
 }
 
 
 export interface Board {
-    height: number;
-    width: number;
-    start: string;
-    target: string;
-    object: string;
-    boardArray: [];
-    nodes: {};
-    nodesToAnimate: [];
-    objectNodesToAnimate: [];
-    shortestPathNodesToAnimate: [];
-    objectShortestPathNodesToAnimate: [];
-    wallsToAnimate: [];
-    mouseDown: boolean;
-    pressedNodeStatus: "normal";
-    previouslyPressedNodeStatus: null;
-    previouslySwitchedNode: null;
-    previouslySwitchedNodeWeight: 0;
-    keyDown: false;
-    algoDone: false;
-    currentAlgorithm: null;
-    currentHeuristic: null;
-    numberOfObjects: 0;
-    isObject: false;
-    buttonsOn: false;
-    speed: "fast";
+    height?: number;
+    width?: number;
+    start?: string;
+    target?: string;
+    object?: string;
+    boardArray?: [];
+    nodes?: {};
+    nodesToAnimate?: string[];
+    objectNodesToAnimate?: [];
+    shortestPathNodesToAnimate?: [];
+    objectShortestPathNodesToAnimate?: [];
+    wallsToAnimate?: [];
+    mouseDown?: boolean;
+    pressedNodeStatus?: string;
+    previouslyPressedNodeStatus?: null;
+    previouslySwitchedNode?: null;
+    previouslySwitchedNodeWeight?: 0;
+    keyDown?: boolean;
+    algoDone?: boolean;
+    currentAlgorithm?: null;
+    currentHeuristic?: null;
+    numberOfObjects?: number;
+    isObject?: boolean;
+    buttonsOn?: boolean;
+    speed?: string;
 }
 
 export interface Node {
