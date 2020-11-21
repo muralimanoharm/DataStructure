@@ -1,8 +1,29 @@
-<h1 class="title">{{title}} : BFS
-    <br><br>
+<mat-card class="title">{{title}}</mat-card><mat-card class="title">Searching Algorithm</mat-card>
+<mat-grid-list cols="3" rowHeight="8:2">
+  <mat-grid-tile>
+    <mat-form-field appearance="fill">
+      <mat-label>Select Algorithm</mat-label>
+      <mat-select [(value)]="currAlgo">
+        <mat-option *ngFor="let algo of algos" [value]="algo.value">
+          {{algo.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+  <mat-grid-tile>
     <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-    <mat-button-toggle (click)="RunBFS()">Visualize!</mat-button-toggle>
+      <mat-button-toggle class="visualize" (click)="RunAlgorithm()">Visualize!</mat-button-toggle>
     </mat-button-toggle-group>
-</h1>
-<br>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-form-field appearance="fill">
+      <mat-label>Speed</mat-label>
+      <mat-select [(value)]="speedV">
+        <mat-option *ngFor="let algo of speedc" [value]="algo.value">
+          {{algo.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
+</mat-grid-list>
 <table [innerHTML]="htmlStr"></table>

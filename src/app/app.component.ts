@@ -1,5 +1,10 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
+import {
+    MatSnackBar,
+    MatSnackBarHorizontalPosition,
+    MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-root',
@@ -22,10 +27,28 @@ export class AppComponent {
     nodesToAnimate = [];
     board: Board;
     speed: number;
+    speedV: string
     object: any;
+    currAlgo: any;
 
-    constructor(private sanitizer: DomSanitizer) {
+    horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+    verticalPosition: MatSnackBarVerticalPosition = 'top';
+
+    algos: any[] = [
+        { value: 'bfs', viewValue: 'Breath First Search' },
+        { value: 'dfs', viewValue: 'Depth First Search' },
+    ];
+
+    speedc: any[] = [
+        { value: 'slow', viewValue: 'Slow' },
+        { value: 'average', viewValue: 'Average' },
+        { value: 'fast', viewValue: 'fast' }
+    ];
+
+    constructor(private sanitizer: DomSanitizer, private _snackBar: MatSnackBar) {
         console.log("Started");
+        this.currAlgo = "";
+        this.speedV = "";
         this.createGrid();
     }
 
@@ -33,11 +56,10 @@ export class AppComponent {
         let boardData = {} as Board;
         this.board = boardData;
         let tableHTML = "";
-        this.board.height = this.height = Math.floor((document.documentElement.clientHeight) / 15);
+        this.board.height = this.height = Math.floor((document.documentElement.clientHeight) / 25);
         this.board.width = this.width = Math.floor(document.documentElement.clientWidth / 25);
         this.board.start = this.start = Math.floor(this.height / 2).toString() + "-" + Math.floor(this.width / 4).toString();
         this.board.target = this.target = Math.floor(this.height / 2).toString() + "-" + Math.floor(3 * this.width / 4).toString();
-        this.board.speed = "average";
 
         console.log(this.height, ":", this.width, ":", this.start, ":", this.target);
         for (let r = 0; r < this.height; r++) {
@@ -149,12 +171,21 @@ export class AppComponent {
         return neighbors;
     }
 
-    RunBFS() {
+    RunAlgorithm() {
         console.log("Test the call");
-        let name = "dfs";
-        //this.createGrid();
-        this.UnweightedSearchAlgorithm(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, name);
-        this.AnimateTheNodes();
+        if (this.currAlgo == "") {
+            console.log("Please Select an algorithm");
+            this.ShowUserMessage("Please Select an algorithm");
+        }else if (this.speedV == "") {
+            console.log("Please Select a Speed Level");
+            this.ShowUserMessage("Please Select a Speed Level");
+        } else {
+            let name = this.currAlgo;
+            this.board.speed = this.speedV;
+            //this.createGrid();
+            this.UnweightedSearchAlgorithm(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, name);
+            this.AnimateTheNodes();
+        }
 
     }
 
@@ -168,7 +199,7 @@ export class AppComponent {
         for (let i = 0; i < nodes.length; i++) {
             setTimeout(() => {
                 this.change(nodes[i], nodes[i - 1]);
-            }, this.speed*(i+1));
+            }, this.speed * (i + 1));
         }
     }
 
@@ -197,6 +228,15 @@ export class AppComponent {
             }
         }
     }
+
+    ShowUserMessage(message: string) {
+        this._snackBar.open(message, "", {
+            duration: 800,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+        });
+    }
+
 }
 
 
