@@ -1,5 +1,15 @@
-<mat-card class="title">{{title}}</mat-card><mat-card class="title">Searching Algorithm</mat-card>
-<mat-grid-list cols="3" rowHeight="8:2">
+<mat-card class="title">
+  <section>
+    <span class="label">Visual {{title}}</span>
+    <span class="menu">
+      <button mat-button>DS Basics</button>
+      <button mat-button>Searching</button>
+      <button mat-button>Sorting</button>
+    </span>
+  </section>
+
+</mat-card>
+<mat-grid-list cols="4" rowHeight="8:2">
   <mat-grid-tile>
     <mat-form-field appearance="fill">
       <mat-label>Select Algorithm</mat-label>
@@ -11,13 +21,8 @@
     </mat-form-field>
   </mat-grid-tile>
   <mat-grid-tile>
-    <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-      <mat-button-toggle class="visualize" (click)="RunAlgorithm()">Visualize!</mat-button-toggle>
-    </mat-button-toggle-group>
-  </mat-grid-tile>
-  <mat-grid-tile>
     <mat-form-field appearance="fill">
-      <mat-label>Speed</mat-label>
+      <mat-label>Select Speed</mat-label>
       <mat-select [(value)]="speedV">
         <mat-option *ngFor="let algo of speedc" [value]="algo.value">
           {{algo.viewValue}}
@@ -25,5 +30,32 @@
       </mat-select>
     </mat-form-field>
   </mat-grid-tile>
+  <mat-grid-tile>
+
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <div class="example-button-container">
+      <button matTooltipPosition="above" matTooltip="Start" (click)="RunAlgorithm()" mat-fab color="warn"
+        aria-label="Example icon button with a home icon">
+        <mat-icon>play_arrow</mat-icon>
+      </button>
+    </div>
+    <div class="example-button-container">
+      <button matTooltipPosition="above" matTooltip="Clear Path" (click)="ClearPath()" mat-fab color="warn"
+        aria-label="Example icon button with a home icon">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    <div class="example-button-container">
+      <button matTooltipPosition="above" matTooltip="Get Help" mat-fab color="warn"
+        aria-label="Example icon button with a home icon">
+        <mat-icon>help</mat-icon>
+      </button>
+    </div>
+    <!-- <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+      <mat-button-toggle class="visualize" (click)="RunAlgorithm()">Visualize!</mat-button-toggle>
+    </mat-button-toggle-group> -->
+  </mat-grid-tile>
 </mat-grid-list>
+<br>
 <table [innerHTML]="htmlStr"></table>

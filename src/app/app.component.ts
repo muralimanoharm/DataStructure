@@ -15,7 +15,7 @@ import {
 
 export class AppComponent {
 
-    title = 'Datastructure';
+    title = 'DataStructure';
     htmlStr: any;
     htmlStrTest: any;
     height: number;
@@ -30,6 +30,7 @@ export class AppComponent {
     speedV: string
     object: any;
     currAlgo: any;
+    breakpoint:number;
 
     horizontalPosition: MatSnackBarHorizontalPosition = 'center';
     verticalPosition: MatSnackBarVerticalPosition = 'top';
@@ -47,15 +48,23 @@ export class AppComponent {
 
     constructor(private sanitizer: DomSanitizer, private _snackBar: MatSnackBar) {
         console.log("Started");
-        this.currAlgo = "";
-        this.speedV = "";
         this.createGrid();
+    }
+
+    ngOnInit() {
+        this.breakpoint = (window.innerWidth <= 400) ? 1 : 6;
+    }
+    
+    onResize(event) {
+      this.breakpoint = (event.target.innerWidth <= 400) ? 1 : 6;
     }
 
     createGrid() {
         let boardData = {} as Board;
         this.board = boardData;
         let tableHTML = "";
+        this.currAlgo = "";
+        this.speedV = "";
         this.board.height = this.height = Math.floor((document.documentElement.clientHeight) / 25);
         this.board.width = this.width = Math.floor(document.documentElement.clientWidth / 25);
         this.board.start = this.start = Math.floor(this.height / 2).toString() + "-" + Math.floor(this.width / 4).toString();
@@ -89,6 +98,7 @@ export class AppComponent {
             tableHTML += currentHTMLRow + `</tr>`;
         }
         this.htmlStr = this.sanitizer.bypassSecurityTrustHtml(tableHTML);
+        this.htmlStrTest = this.sanitizer.bypassSecurityTrustHtml(tableHTML);
     };
 
     UnweightedSearchAlgorithm(nodes: Node[], start: string, target: string, nodesToAnimate: string[], boardArray: string[], name: string) {
@@ -182,12 +192,53 @@ export class AppComponent {
         } else {
             let name = this.currAlgo;
             this.board.speed = this.speedV;
-            //this.createGrid();
+            this.ClearPath();
             this.UnweightedSearchAlgorithm(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, name);
             this.AnimateTheNodes();
         }
 
     }
+
+    ClearPath()
+    {
+        let start = this.nodes[this.start];
+        let target = this.nodes[this.target];
+        //let object = this.numberOfObjects ? this.nodes[this.object] : null;
+        let object = null;
+        start.status = "start";
+        document.getElementById(start.id).className = "start";
+        target.status = "target";
+        document.getElementById(target.id).className = "target";
+        if (object) {
+            object.status = "object";
+            document.getElementById(object.id).className = "object";
+        }
+
+        Object.keys(this.nodes).forEach(id => {
+            let currentNode = this.nodes[id];
+            currentNode.previousNode = null;
+            currentNode.distance = Infinity;
+            currentNode.totalDistance = Infinity;
+            currentNode.heuristicDistance = null;
+            currentNode.direction = null;
+            currentNode.storedDirection = null;
+            currentNode.relatesToObject = false;
+            currentNode.overwriteObjectRelation = false;
+            currentNode.otherpreviousNode = null;
+            currentNode.otherdistance = Infinity;
+            currentNode.otherdirection = null;
+            let currentHTMLNode = document.getElementById(id);
+            let relevantStatuses = ["wall", "start", "target", "object"];
+            if ((!relevantStatuses.includes(currentNode.status) || currentHTMLNode.className === "visitedobject") && currentNode.weight !== 15) {
+                currentNode.status = "unvisited";
+                currentHTMLNode.className = "unvisited";
+            } else if (currentNode.weight === 15) {
+                currentNode.status = "unvisited";
+                currentHTMLNode.className = "unvisited weight";
+            }
+        });
+    }
+
 
     AnimateTheNodes() {
         let nodes = this.board.nodesToAnimate.slice(0);

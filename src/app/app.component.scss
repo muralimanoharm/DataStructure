@@ -19,16 +19,48 @@ mat-card{
     background: mintcream;
 }
 
-.visualize{
+mat-form-field{
+    padding-top: 20px;
+}
 
+.clearButton{
+    margin-left: 12px;
 }
 
 .title{
-  text-align: center;
-  background: #2a3957;
-    color: aliceblue;
+  //text-align: center;
+font-size: x-large;
+background: #2a3957;
+color: aliceblue;
 }
 
+.menu{
+    padding-left: 8%;
+    button{
+    font-size: 18px;
+    }
+
+    .mat-button:hover {
+        color: #2a3957;
+        background: #dddddd;
+      }
+}
+
+.label{
+
+}
+
+.mat-tooltip
+{
+    font-size: medium;
+}
+
+.example-button-container {
+    display: flex;
+    justify-content: center;
+    width: 70px;
+  }
+  
 .target {
     /*border: 1px solid rgb(175, 216, 248);*/
     background-image: url("./circle.svg");
