@@ -30,17 +30,17 @@ export class AppComponent {
     speedV: string
     object: any;
     currAlgo: any;
+    currAlgoType:any;
     algoDone: boolean;
     breakpoint: number;
     previouslySwitchedNode: any;
     previouslyPressedNodeStatus: any;
     keyDown: any;
     type: string;
-    pressedNodeStatus = "normal";
     previouslySwitchedNodeWeight = 0;
     currentAlgorithm: string;
     buttonsOn: boolean;
-    currentNodesToAnimate: any[];
+    currentNodesToAnimate = [];
     mazeType: string;
     horizontalPosition: MatSnackBarHorizontalPosition = 'center';
     verticalPosition: MatSnackBarVerticalPosition = 'top';
@@ -90,65 +90,65 @@ export class AppComponent {
     }
 
     @HostListener('click', ['$event']) onClick(event) {
-        let board = this.board;
-        for (let r = 0; r < board.height; r++) {
-            for (let c = 0; c < board.width; c++) {
+        this.board;
+        for (let r = 0; r < this.board.height; r++) {
+            for (let c = 0; c < this.board.width; c++) {
                 let currentId = `${r}-${c}`;
                 let currentNode = this.getNode(currentId);
                 let currentElement = document.getElementById(currentId);
                 currentElement.onmousedown = (e) => {
                     e.preventDefault();
                     if (this.buttonsOn) {
-                        board.mouseDown = true;
+                        this.board.mouseDown = true;
                         if (currentNode.status === "start" || currentNode.status === "target" || currentNode.status === "object") {
-                            board.pressedNodeStatus = currentNode.status;
+                            this.board.pressedNodeStatus = currentNode.status;
                         } else {
-                            board.pressedNodeStatus = "normal";
+                            this.board.pressedNodeStatus = "normal";
                             this.changeNormalNode(currentNode);
                         }
                     }
                 }
                 currentElement.onmouseup = () => {
                     if (this.buttonsOn) {
-                        board.mouseDown = false;
-                        if (board.pressedNodeStatus === "target") {
-                            board.target = currentId;
-                        } else if (board.pressedNodeStatus === "start") {
-                            board.start = currentId;
-                        } else if (board.pressedNodeStatus === "object") {
-                            board.object = currentId;
+                        this.board.mouseDown = false;
+                        if (this.board.pressedNodeStatus === "target") {
+                            this.board.target = currentId;
+                        } else if (this.board.pressedNodeStatus === "start") {
+                            this.board.start = currentId;
+                        } else if (this.board.pressedNodeStatus === "object") {
+                            this.board.object = currentId;
                         }
-                        board.pressedNodeStatus = "normal";
+                        this.board.pressedNodeStatus = "normal";
                     }
                 }
                 currentElement.onmouseenter = () => {
                     if (this.buttonsOn) {
-                        if (board.mouseDown && board.pressedNodeStatus !== "normal") {
+                        if (this.board.mouseDown && this.board.pressedNodeStatus !== "normal") {
                             this.changeSpecialNode(currentNode);
-                            if (board.pressedNodeStatus === "target") {
-                                board.target = currentId;
-                                if (board.algoDone) {
-                                    //board.redoAlgorithm();
+                            if (this.board.pressedNodeStatus === "target") {
+                                this.board.target = currentId;
+                                if (this.board.algoDone) {
+                                    this.RunAlgorithm();
                                 }
-                            } else if (board.pressedNodeStatus === "start") {
-                                board.start = currentId;
-                                if (board.algoDone) {
-                                    //board.redoAlgorithm();
+                            } else if (this.board.pressedNodeStatus === "start") {
+                                this.board.start = currentId;
+                                if (this.board.algoDone) {
+                                    this.RunAlgorithm();
                                 }
-                            } else if (board.pressedNodeStatus === "object") {
-                                board.object = currentId;
-                                if (board.algoDone) {
-                                    //board.redoAlgorithm();
+                            } else if (this.board.pressedNodeStatus === "object") {
+                                this.board.object = currentId;
+                                if (this.board.algoDone) {
+                                    this.RunAlgorithm();
                                 }
                             }
-                        } else if (board.mouseDown) {
+                        } else if (this.board.mouseDown) {
                             this.changeNormalNode(currentNode);
                         }
                     }
                 }
                 currentElement.onmouseleave = () => {
                     if (this.buttonsOn) {
-                        if (board.mouseDown && board.pressedNodeStatus !== "normal") {
+                        if (this.board.mouseDown && this.board.pressedNodeStatus !== "normal") {
                             this.changeSpecialNode(currentNode);
                         }
                     }
@@ -160,8 +160,8 @@ export class AppComponent {
     /*GRID RELATED FUNCTIONS*/
 
     createGrid() {
-        let boardData = {} as Board;
-        this.board = boardData;
+        this.board = {} as Board;
+        this.previouslySwitchedNode = {} as Node;
         let tableHTML = "";
         this.currAlgo = "";
         this.speedV = "";
@@ -169,10 +169,10 @@ export class AppComponent {
         this.buttonsOn = true;
         this.board.height = this.height = Math.floor((document.documentElement.clientHeight) / 25);
         this.board.width = this.width = Math.floor(document.documentElement.clientWidth / 25);
-        this.board.start = this.start = Math.floor(this.height / 2).toString() + "-" + Math.floor(this.width / 4).toString();
-        this.board.target = this.target = Math.floor(this.height / 2).toString() + "-" + Math.floor(3 * this.width / 4).toString();
+        this.board.start = Math.floor(this.height / 2).toString() + "-" + Math.floor(this.width / 4).toString();
+        this.board.target = Math.floor(this.height / 2).toString() + "-" + Math.floor(3 * this.width / 4).toString();
 
-        console.log(this.height, ":", this.width, ":", this.start, ":", this.target);
+        console.log(this.height, ":", this.width, ":", this.board.start, ":", this.board.target);
         for (let r = 0; r < this.height; r++) {
             let currentArrayRow = [];
             let currentHTMLRow = `<tr id="row ${r}">`;
@@ -181,10 +181,10 @@ export class AppComponent {
                     newNodeClass;
                 if (r === Math.floor(this.height / 2) && c === Math.floor(this.width / 4)) {
                     newNodeClass = "start";
-                    this.start = `${newNodeId}`;
+                    this.board.start = `${newNodeId}`;
                 } else if (r === Math.floor(this.height / 2) && c === Math.floor(3 * this.width / 4)) {
                     newNodeClass = "target";
-                    this.target = `${newNodeId}`;
+                    this.board.target = `${newNodeId}`;
                 } else {
                     newNodeClass = "unvisited";
                 }
@@ -214,7 +214,11 @@ export class AppComponent {
     changeSpecialNode(currentNode) {
         let element = document.getElementById(currentNode.id),
             previousElement;
-        if (this.previouslySwitchedNode) previousElement = document.getElementById(this.previouslySwitchedNode.id);
+        if (this.previouslySwitchedNode) 
+        {
+            console.log("previouslySwitchedNode.id :",this.previouslySwitchedNode.id);
+            previousElement = document.getElementById(this.previouslySwitchedNode.id);
+        }
         if (currentNode.status !== "target" && currentNode.status !== "start" && currentNode.status !== "object") {
             if (this.previouslySwitchedNode) {
                 this.previouslySwitchedNode.status = this.previouslyPressedNodeStatus;
@@ -222,19 +226,19 @@ export class AppComponent {
                     "unvisited weight" : this.previouslyPressedNodeStatus;
                 this.previouslySwitchedNode.weight = this.previouslySwitchedNodeWeight === 15 ?
                     15 : 0;
-                this.previouslySwitchedNode = null;
                 this.previouslySwitchedNodeWeight = currentNode.weight;
 
                 this.previouslyPressedNodeStatus = currentNode.status;
-                element.className = this.pressedNodeStatus;
-                currentNode.status = this.pressedNodeStatus;
+                element.className = this.board.pressedNodeStatus;
+                currentNode.status = this.board.pressedNodeStatus;
 
                 currentNode.weight = 0;
             }
-        } else if (currentNode.status !== this.pressedNodeStatus && !this.algoDone) {
-            this.previouslySwitchedNode.status = this.pressedNodeStatus;
-            previousElement.className = this.pressedNodeStatus;
-        } else if (currentNode.status === this.pressedNodeStatus) {
+        } else if (currentNode.status !== this.board.pressedNodeStatus && !this.algoDone) {
+            this.previouslySwitchedNode.id = currentNode.id;
+            this.previouslySwitchedNode.status = this.board.pressedNodeStatus;
+            previousElement.className = this.board.pressedNodeStatus;
+        } else if (currentNode.status === this.board.pressedNodeStatus) {
             this.previouslySwitchedNode = currentNode;
             element.className = this.previouslyPressedNodeStatus;
             currentNode.status = this.previouslyPressedNodeStatus;
@@ -277,15 +281,17 @@ export class AppComponent {
             this.board.speed = this.speedV;
             this.type = "unweighted";
             this.ClearPath();
-            this.UnweightedSearchAlgorithm(this.nodes, this.start, this.target, this.nodesToAnimate, this.boardArray, name);
+            this.UnweightedSearchAlgorithm(this.nodes,  this.board.start,  this.board.target, this.nodesToAnimate, this.boardArray, name);
             this.AnimateTheNodes();
         }
 
     }
 
     ClearPath() {
-        let start = this.nodes[this.start];
-        let target = this.nodes[this.target];
+        this.nodesToAnimate = [];
+        this.currentNodesToAnimate = [];
+        let start = this.nodes[ this.board.start];
+        let target = this.nodes[ this.board.target];
         //let object = this.numberOfObjects ? this.nodes[this.object] : null;
         let object = null;
         start.status = "start";
@@ -298,6 +304,7 @@ export class AppComponent {
         }
 
         Object.keys(this.nodes).forEach(id => {
+            
             let currentNode = this.nodes[id];
             currentNode.previousNode = null;
             currentNode.distance = Infinity;
@@ -353,7 +360,7 @@ export class AppComponent {
         let exploredNodes = {
             start: true
         };
-        nodesToAnimate = [];
+        //nodesToAnimate = [];
         while (structure.length) {
             let currentNode = name === "bfs" ? structure.shift() : structure.pop();
             nodesToAnimate.push(currentNode);
@@ -437,7 +444,7 @@ export class AppComponent {
             setTimeout(() => {
                 this.change(nodes[i], nodes[i - 1]);
                 if (i == nodes.length - 1) {
-                    this.drawShortestPathTimeout(this.target, this.start, this.type, this.object);
+                    this.drawShortestPathTimeout( this.board.target,  this.board.start, this.type, this.object);
                     this.DrawShortestPath(0);
                 }
 

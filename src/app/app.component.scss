@@ -28,9 +28,13 @@ mat-form-field{
 }
 
 .title{
-font-size: x-large;
-background: #2a3957;
-color: aliceblue;
+    section{
+        padding: 3px;
+    }
+    font-size: x-large;
+    background: #2a3957;
+    color: aliceblue;
+    padding: initial;
 }
 
 mat-grid-list{
@@ -89,6 +93,21 @@ mat-grid-list{
     background-color: white
 }
 
+.borderlessWeight {
+    background-image: url("./weight.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    animation-name: unvisitedWeightAnimation;
+    animation-duration: 0.3s;
+    animation-timing-function: ease-out;
+    animation-delay: 0;
+    animation-direction: alternate;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-play-state: running;
+}
+
 
 table {
     font-family: arial, sans-serif;
@@ -112,7 +131,7 @@ table {
   }
 
 
-  .visitedStartNodeBlue {
+.visitedStartNodeBlue {
     /*border: 1px solid rgb(175, 216, 248);*/
     background-image: url('./triangletwo-right.svg');
     /*background-color: rgb(255, 254, 106);*/
@@ -265,17 +284,27 @@ table {
 
 .shortest-path-unweighted {
     /*border: 1px solid rgb(175, 216, 248);*/
-    background: url('./triangletwo-right.svg');
+    background: url('./spaceshiptwo-up.svg');
     background-color: rgb(255, 254, 106);
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain
 }
 
+.instantStartTransparent {
+    /*border: 1px solid rgb(175, 216, 248);*/
+    opacity: 0.5;
+    background-image: url('./triangletwo-right.svg');
+    background-color: rgb(255, 254, 106);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
 .startTransparent {
     /*border: 1px solid rgb(175, 216, 248);*/
     opacity: 0.5;
-    background-image: url("./triangletwo-right.svg");
+    background-image: url('./triangletwo-right.svg');
     background-color: rgb(255, 254, 106);
     background-position: center;
     background-repeat: no-repeat;
@@ -290,6 +319,23 @@ table {
     animation-play-state: running;
 }
 
+
+.object {
+    /*border: 1px solid rgb(175, 216, 248);*/
+    background-image: url('./diamond.svg');
+    /*background-color: rgb(255, 254, 106);*/
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    animation-name: specialNodes;
+    animation-duration: 2.0s;
+    animation-timing-function: ease-out;
+    animation-delay: 0;
+    animation-direction: alternate;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-play-state: running;
+}
 
 
 
@@ -454,4 +500,45 @@ table {
         transform: scale(1.0);
         background-color: rgba(0, 190, 218, 0.75);
     }
+}
+
+#mainText>ul li {
+    display: inline-block;
+    list-style: none;
+    padding: 0 28px 0 0;
+}
+
+.options div{
+    width: 205px;
+    height: 70px;
+    display: inline-block;
+    position: relative;
+    top: 0.35em;
+    margin: 0 0.42em;
+}
+
+.options ul li {
+    display: inline-block;
+    list-style: none;
+    padding: 0 28px 0 0;
+}
+
+#mainText div {
+    /*border: 1px solid rgb(12, 53, 71);*/
+    width: 35px;
+    height: 30px;
+    display: inline-block;
+    position: relative;
+    top: 0.35em;
+    margin: 0 0.42em;
+}
+
+
+.shortest-path-unweighted {
+    /*border: 1px solid rgb(175, 216, 248);*/
+    background: url('./spaceshiptwo-up.svg');
+    background-color: rgb(255, 254, 106);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain
 }

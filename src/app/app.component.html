@@ -1,19 +1,20 @@
-<mat-card class="title">
+<div class="title">
   <section>
     <span class="label">Visual {{title}}</span>
     <span class="menu">
       <button mat-button>DS Basics</button>
       <button mat-button>Searching</button>
       <button mat-button>Sorting</button>
+      <button mat-button>Maze Algorithm</button>
     </span>
   </section>
 
-</mat-card>
+</div>
 <mat-grid-list cols="5" rowHeight="8:2">
   <mat-grid-tile>
     <mat-form-field appearance="fill">
       <mat-label>Algorithm Type</mat-label>
-      <mat-select [(value)]="currAlgo" (selectionChange)="SetAlgoType($event.value)">
+      <mat-select [(value)]="currAlgoType" (selectionChange)="SetAlgoType($event.value)">
         <mat-option *ngFor="let algo of algosType" [value]="algo.value">
           {{algo.viewValue}}
         </mat-option>
@@ -74,5 +75,47 @@
     </mat-button-toggle-group> -->
   </mat-grid-tile>
 </mat-grid-list>
-<br>
+
+<div id="mainText">
+  <ul>
+    <li>
+      <div class="start"></div>Start Node
+    </li>
+    <li>
+      <div class="target"></div>Target Node
+    </li>
+    <li id="bombLegend">
+      <div class="object"></div>Bomb Node
+    </li>
+    <li id="weightLegend">
+      <div class="borderlessWeight"></div>Weight Node
+    </li>
+    <li>
+      <div class="unvisited"></div>Unvisited Node
+    </li>
+    <li>
+      <div class="visited"></div>
+      <div class="visitedobject"></div>Visited Nodes
+    </li>
+    <li>
+      <div class="shortest-path"></div>Shortest-path Node
+    </li>
+    <li>
+      <div class="wall"></div>Wall Node
+    </li>
+  </ul>
+  <ul>
+    <li>
+      <button mat-raised-button [matBadge]="nodesToAnimate.length" matBadgePosition="above" matBadgeColor="accent">
+        visited
+      </button>
+    </li>
+    <li>
+      <button mat-raised-button [matBadge]="currentNodesToAnimate.length" matBadgePosition="above"
+        matBadgeColor="accent">
+        Solution
+      </button>
+    </li>
+  </ul>
+</div>
 <table [innerHTML]="htmlStr"></table>
