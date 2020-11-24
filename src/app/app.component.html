@@ -9,7 +9,17 @@
   </section>
 
 </mat-card>
-<mat-grid-list cols="4" rowHeight="8:2">
+<mat-grid-list cols="5" rowHeight="8:2">
+  <mat-grid-tile>
+    <mat-form-field appearance="fill">
+      <mat-label>Algorithm Type</mat-label>
+      <mat-select [(value)]="currAlgo" (selectionChange)="SetAlgoType($event.value)">
+        <mat-option *ngFor="let algo of algosType" [value]="algo.value">
+          {{algo.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-grid-tile>
   <mat-grid-tile>
     <mat-form-field appearance="fill">
       <mat-label>Select Algorithm</mat-label>
@@ -31,7 +41,14 @@
     </mat-form-field>
   </mat-grid-tile>
   <mat-grid-tile>
-
+    <mat-form-field appearance="fill">
+      <mat-label>Select Maze</mat-label>
+      <mat-select [(value)]="mazeType" (selectionChange)="GenerateMaze($event.value)">
+        <mat-option *ngFor="let maz of maze" [value]="maz.value">
+          {{maz.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </mat-grid-tile>
   <mat-grid-tile>
     <div class="example-button-container">
