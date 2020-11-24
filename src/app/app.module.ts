@@ -10,10 +10,18 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatNativeDateModule} from '@angular/material/core';
 
 import {HttpClientModule} from '@angular/common/http';
+import { SearchingComponent } from './searching/searching.component';
+import { MazeComponent } from './maze/maze.component';
+import { SortingComponent } from './sorting/sorting.component';
+import { MenubarComponent } from './menubar/menubar.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SearchingComponent,
+    MazeComponent,
+    SortingComponent,
+    MenubarComponent
   ],
   imports: [
     BrowserModule,
