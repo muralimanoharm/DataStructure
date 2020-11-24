@@ -1,2 +1,19 @@
-<app-menubar></app-menubar>
-<app-searching></app-searching>
+<div [ngClass]="{'setNightScreen':nightScreen.value}">
+  <div class="row">
+      <div class=" header">
+          <div class="mat-app-background ">
+              <app-menubar></app-menubar>
+          </div>
+      </div>
+      <button (click)="GoToTop()" id="myBtn" title="Go to top">Top</button>
+      <div>
+          <!-- <div class="right nightMode">
+              <mat-slide-toggle [formControl]="nightScreen" (change)="NightMode()" [color]="'primary'">Night Screen</mat-slide-toggle>
+          </div> -->
+          <router-outlet #routerOutlet="outlet"></router-outlet>
+      </div>
+  </div>
+  <div class="footer mat-elevation-z6">
+      <app-footer></app-footer>
+  </div>
+</div>

@@ -14,6 +14,7 @@ import { SearchingComponent } from './searching/searching.component';
 import { MazeComponent } from './maze/maze.component';
 import { SortingComponent } from './sorting/sorting.component';
 import { MenubarComponent } from './menubar/menubar.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { MenubarComponent } from './menubar/menubar.component';
     SearchingComponent,
     MazeComponent,
     SortingComponent,
-    MenubarComponent
+    MenubarComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
