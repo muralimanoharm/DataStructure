@@ -13,7 +13,8 @@ import {
   encapsulation: ViewEncapsulation.None
 })
 export class SearchingComponent {
-
+  
+  panelOpenState:boolean;
   htmlStr: any;
   htmlStrTest: any;
   height: number;
@@ -75,8 +76,8 @@ export class SearchingComponent {
       { value: 'ssp', viewValue: 'Simple Stair Pattern' }
   ];
   constructor(private sanitizer: DomSanitizer, private _snackBar: MatSnackBar) {
-      console.log("Started");
       this.createGrid();
+      this.panelOpenState=false;
   }
 
   ngOnInit() {
@@ -154,7 +155,19 @@ export class SearchingComponent {
           }
       }
   };
+  
+  ngAfterViewInit() {
+    this.detectScreenSize();
+  }
 
+  private detectScreenSize() {
+    // we will write this logic later
+  }
+
+  ChangeHelpVisibleState()
+  {
+    this.panelOpenState=!this.panelOpenState;
+  }
   /*GRID RELATED FUNCTIONS*/
 
   createGrid() {
@@ -214,7 +227,6 @@ export class SearchingComponent {
           previousElement;
       if (this.previouslySwitchedNode) 
       {
-          console.log("previouslySwitchedNode.id :",this.previouslySwitchedNode.id);
           previousElement = document.getElementById(this.previouslySwitchedNode.id);
       }
       if (currentNode.status !== "target" && currentNode.status !== "start" && currentNode.status !== "object") {
@@ -267,12 +279,9 @@ export class SearchingComponent {
   };
   /**COMMON ALGORITHM FUNCTIONS */
   RunAlgorithm() {
-      console.log("Test the call");
       if (this.currAlgo == "") {
-          console.log("Please Select an algorithm");
           this.ShowUserMessage("Please Select an algorithm");
       } else if (this.speedV == "") {
-          console.log("Please Select a Speed Level");
           this.ShowUserMessage("Please Select a Speed Level");
       } else {
           let name = this.currAlgo;
@@ -436,8 +445,6 @@ export class SearchingComponent {
       this.speed = this.board.speed === "fast" ?
           5 : this.board.speed === "average" ?
               20 : 70;
-      console.log(nodes);
-      console.log("speed:", this.speed);
       for (let i = 0; i < nodes.length; i++) {
           setTimeout(() => {
               this.change(nodes[i], nodes[i - 1]);
@@ -653,7 +660,6 @@ export class SearchingComponent {
 
   /**MAZE CREATION CODE */
   GenerateMaze(mazeType: string) {
-      console.log(mazeType);
       this.ClearWalls();
       this.ClearPath();
       this.board.wallsToAnimate = [];

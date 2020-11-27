@@ -7,7 +7,7 @@ import { SortingComponent } from './sorting/sorting.component'
 const routes: Routes = [
   { path : '', pathMatch:'prefix', redirectTo:'search' },
   { path : 'search', component:SearchingComponent},
-  { path : 'sorting', component:SortingComponent},
+  { path : 'sort', component:SortingComponent},
   { path : 'maze' , component:MazeComponent } 
 ];
 

@@ -1,11 +1,40 @@
-<div class="title">
-    <section>
-      <span class="label">Visual {{title}}</span>
-      <span class="menu">
-        <button mat-button>DS Basics</button>
-        <button mat-button routerLink="search" routerLinkActive="active">Searching</button>
-        <button mat-button>Sorting</button>
-        <button mat-button>Maze Algorithm</button>
-      </span>
-    </section>
+<div id="navbar" [ngClass]="{'setNightScreen':GetNightScreenValue(),'setDayScreen':!GetNightScreenValue()}" class="menuBar mat-elevation-z6">
+  <!-- <div class="row">
+      <div class="col-s-10">
+          <h1> Check This </h1>
+      </div>
+      <!-- <div class="col-s-2">
+
+          <a href="#" class="fa fa-facebook"></a>
+          <a href="#" class="fa fa-twitter"></a>
+          <a href="#" class="fa fa-reddit"></a>
+          <a href="#" class="fa fa-telegram"></a>
+      </div> -->
+
+  <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+  <div class="row">
+      <div (click)="HideMenu()" routerLink="" routerLinkActive="active" class="col-s-1 title">
+          <button mat-button class="titleText">
+              {{title}}</button>
+      </div>
+      <div class="col-s-2" class="icon" (click)="ExpandMenu()">
+          <i class="fa fa-bars "></i>
+      </div>
+
+      <div #sideNavBar class="col-s-9 topnav" id="myTopnav">
+
+          <button (click)="HideMenu()" routerLink="Crypto" routerLinkActive="active" mat-stroked-button>Basics</button>
+          <button (click)="HideMenu()" routerLink="search" routerLinkActive="active" mat-stroked-button>Searching</button>
+          <button (click)="HideMenu()" routerLink="sort" routerLinkActive="active" mat-stroked-button>Sorting</button>
+          <button (click)="HideMenu()" routerLink="maze" routerLinkActive="active" mat-stroked-button>Maze</button>
+      </div>
+      <!-- <div class="col-s-2 socialTab">
+
+          <a href="" class="fa fa-facebook"></a>
+          <a href="" class="fa fa-twitter"></a>
+          <a href="" class="fa fa-reddit"></a>
+          <a href="" class="fa fa-telegram"></a>
+      </div> -->
   </div>
+
+</div>
